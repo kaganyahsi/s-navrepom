@@ -1,0 +1,43 @@
+---
+title: "Istatistik II Ara Sınav"
+author: "İbrahim Kağan Yahşi"
+date: "2023-04-16"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(readr)
+veri <- read_csv("~/Downloads/veri1.csv")
+head(veri,10)
+# A tibble: 6 × 13
+#  Date       AveragePrice `Total Volume` `4046`  `4225` `4770` `Total Bags`
+#  <date>            <dbl>          <dbl>  <dbl>   <dbl>  <dbl>        <dbl>
+# 2015-12-27         1.33         64237.  1037.  54455.   48.2        8697.
+# 2015-12-20         1.35         54877.   674.  44639.   58.3        9506.
+# 2015-12-13         0.93        118220.   795. 109150.  130.         8145.
+# 2015-12-06         1.08         78992.  1132   71976.   72.6        5811.
+# 2015-11-29         1.28         51040.   941.  43838.   75.8        6184.
+# 2015-11-22         1.26         55980.  1184.  48068.   43.6        6684.
+# ℹ 6 more variables: `Small Bags` <dbl>, `Large Bags` <dbl>,
+#   `XLarge Bags` <dbl>, type <chr>, year <fct>, region <chr>
+str(veri)
+veri$year<-as.factor(veri$year)
+summary(veri)
+regional_volume_byYear<-aggregate(x=veri$`Total Volume`,by=list(veri$region,veri$year),FUN=mean)
+colnames(regional_volume_byYear)<-c("region","year","mean")
+regional_volume_byYear[order(regional_volume_byYear$mean,decreasing=T),]
+p <- ggplot(regional_volume_byYear, aes(x=year, y=mean,color=year)) + 
+  geom_boxplot()
+p
+
+
+
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
